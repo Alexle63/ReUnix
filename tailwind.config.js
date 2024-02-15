@@ -2,7 +2,15 @@
 module.exports = {
     content: ["./*.{html,js}"],
   theme: {
-    extend: {},
+    extend: {
+        fontFamily: {
+            'terminal': ['"Lucida Console"', 'monospace']
+        },
+        colors: {
+            'grn': '#39ff14',
+        },
+    },
+    
   },
   plugins: [],
 }

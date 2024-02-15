@@ -444,6 +444,18 @@ video {
   display: none;
 }
 
+html {
+  font-family: 'Lucida Console', monospace;
+}
+
+input {
+  background-color: black;
+}
+
+input:focus {
+  outline: none;
+}
+
 *, ::before, ::after {
   --tw-border-spacing-x: 0;
   --tw-border-spacing-y: 0;
@@ -544,25 +556,62 @@ video {
   --tw-backdrop-sepia:  ;
 }
 
+.inline {
+  display: inline;
+}
+
+.flex {
+  display: flex;
+}
+
+.h-screen {
+  height: 100vh;
+}
+
+.w-1\/4 {
+  width: 25%;
+}
+
+.w-3\/4 {
+  width: 75%;
+}
+
+.w-full {
+  width: 100%;
+}
+
+.overflow-hidden {
+  overflow: hidden;
+}
+
+.whitespace-pre {
+  white-space: pre;
+}
+
+.border {
+  border-width: 1px;
+}
+
+.border-grn {
+  --tw-border-opacity: 1;
+  border-color: rgb(57 255 20 / var(--tw-border-opacity));
+}
+
 .bg-black {
   --tw-bg-opacity: 1;
   background-color: rgb(0 0 0 / var(--tw-bg-opacity));
 }
 
-.text-3xl {
-  font-size: 1.875rem;
-  line-height: 2.25rem;
+.p-4 {
+  padding: 1rem;
 }
 
-.font-bold {
-  font-weight: 700;
-}
-
-.text-white {
+.text-grn {
   --tw-text-opacity: 1;
-  color: rgb(255 255 255 / var(--tw-text-opacity));
+  color: rgb(57 255 20 / var(--tw-text-opacity));
 }
 
-.underline {
-  text-decoration-line: underline;
+.blur {
+  --tw-blur: blur(8px);
+  filter: var(--tw-blur) var(--tw-brightness) var(--tw-contrast) var(--tw-grayscale) var(--tw-hue-rotate) var(--tw-invert) var(--tw-saturate) var(--tw-sepia) var(--tw-drop-shadow);
 }
