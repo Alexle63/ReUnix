@@ -448,10 +448,6 @@ html {
   font-family: 'Lucida Console', monospace;
 }
 
-input {
-  background-color: black;
-}
-
 input:focus {
   outline: none;
 }
@@ -556,12 +552,20 @@ input:focus {
   --tw-backdrop-sepia:  ;
 }
 
-.inline {
-  display: inline;
+.block {
+  display: block;
 }
 
 .flex {
   display: flex;
+}
+
+.contents {
+  display: contents;
+}
+
+.hidden {
+  display: none;
 }
 
 .h-screen {
@@ -576,16 +580,32 @@ input:focus {
   width: 75%;
 }
 
-.w-full {
-  width: 100%;
-}
-
 .overflow-hidden {
   overflow: hidden;
 }
 
+.overflow-scroll {
+  overflow: scroll;
+}
+
+.overflow-y-auto {
+  overflow-y: auto;
+}
+
+.overflow-y-scroll {
+  overflow-y: scroll;
+}
+
 .whitespace-pre {
   white-space: pre;
+}
+
+.whitespace-pre-wrap {
+  white-space: pre-wrap;
+}
+
+.break-words {
+  overflow-wrap: break-word;
 }
 
 .border {
@@ -604,6 +624,10 @@ input:focus {
 
 .p-4 {
   padding: 1rem;
+}
+
+.pb-36 {
+  padding-bottom: 9rem;
 }
 
 .text-grn {

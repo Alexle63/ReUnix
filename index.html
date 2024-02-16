@@ -6,18 +6,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ReUnix</title>
     <link rel="stylesheet" href="./style.css">
-    <script src="./index.js"></script>
+    <script type="module" src="./index.js"></script>
 </head>
 
-<body class="flex text-grn bg-black  font-xs overflow-hidden">
-    <div class="h-vh w-3/4 border-grn border w-full p-4 whitespace-pre" id="terminal">
-    </div>
-            
-    <div class="bg-blue border border-grn h-screen w-1/4  p-4">
-        <p>Welcome hacker! Let's learn Linux terminal. <br>
+<body>
+    <div class="flex h-screen text-grn bg-black font-xs overflow-hidden break-words">
+
+        <div class="block w-3/4 border-grn border pb-36 p-4 whitespace-pre-wrap overflow-y-auto" id="terminal">
+        </div>
         
-        Your first mission is to connect to a computer and delete a crucial file, and disconnect. Click on the terminal commands
-        in this tutorial.</p>
+        <p class="border border-grn h-screen w-1/4 p-4 whitespace-pre-wrap " id="chat"> 
+        </p>
     </div>
 
 </body>

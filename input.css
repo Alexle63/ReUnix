@@ -6,9 +6,6 @@
     html {
         font-family: 'Lucida Console', monospace;
     }
-    input {
-        background-color: black;
-    }
     input:focus {
         outline: none;
     }

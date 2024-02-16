@@ -10,5 +10,9 @@
   "license": "ISC",
   "devDependencies": {
     "tailwindcss": "^3.4.1"
+  },
+  "type": "module",
+  "dependencies": {
+    "shelljs": "^0.8.5"
   }
 }
