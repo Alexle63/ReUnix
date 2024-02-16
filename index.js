@@ -126,6 +126,13 @@ function resetCMDLine() {
         cmdInput.focus()
     };
 
+    document.getElementById('cmdInput').addEventListener('keydown', function (event) {
+        if (event.key === 'Tab') {
+            event.preventDefault();
+        }
+        // TODO: autocomplete
+    });
+
     form.onsubmit = function (event) {
         event.preventDefault();
 
