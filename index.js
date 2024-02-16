@@ -1,29 +1,27 @@
-// import * as shell from 'shelljs'
-
 class SFile {
     #content;
     #readable;
     #sudo;
     name;
-    constructor(name, readable, content, sudo = false ) {
+    constructor(name, readable, content, sudo = false) {
         this.name = name;
         this.#readable = readable;
         this.#sudo = sudo;
         this.#content = content;
     }
-    get name(){
+    get name() {
         return this.name
     }
     // set name(newName){
     //     this.name = newName
     // }
-    get readable(){
+    get readable() {
         return this.#readable
     }
-    get content(){
+    get content() {
         return this.#content
     }
-    get sudo(){
+    get sudo() {
         return this.#sudo
     }
 
@@ -33,7 +31,7 @@ class Folder {
     #name;
     #contents;
     #parent;
-    constructor(name, parent){
+    constructor(name, parent) {
         this.#name = name;
         this.#contents = [];
         this.#parent = parent;
@@ -44,25 +42,25 @@ class Folder {
     append(file) {
         this.#contents.push(file)
     }
-    get name(){
+    get name() {
         return this.#name
     }
-    get contents(){
+    get contents() {
         return this.#contents.map((file) => file.name).join("\t")
     }
-    get rootPath(){
+    get rootPath() {
         return !this.#parent ? '' : this.#parent.rootPath + '/' + this.#name
     }
 }
 
-function printTerminal(text, type="p") {
+function printTerminal(text, type = "p") {
     const element = document.createElement(type);
     element.textContent = text;
     terminal.appendChild(element);
 }
 
 async function printChat(text) {
-    let i=0
+    let i = 0
     text += "\n"
     while (i < text.length) {
         chat.textContent += text.charAt(i);
@@ -71,12 +69,12 @@ async function printChat(text) {
     }
 }
 
-function printManual(cmd){
-    switch(cmd){
-        case("man"):
+function printManual(cmd) {
+    switch (cmd) {
+        case ("man"):
             printTerminal("Here is the manual page for the command:")
             printTerminal("man")
-            break;  
+            break;
         default:
             printTerminal(`Command ${cmd} not found.`)
     }
@@ -91,20 +89,20 @@ function resetCMDLine() {
     const line = document.createElement("div")
     line.setAttribute("style", "display: flex")
 
-    const homeCMD = document.createElement("p")    
+    const homeCMD = document.createElement("p")
 
     let path = currentFolder.rootPath.replace("/home/user", "~");
-    if(path.split('/').length > 3) {
+    if (path.split('/').length > 3) {
         let len = path.split('/').length
-        path = '/'+path.split('/').slice(len - (len - 3)).join('/')
+        path = '/' + path.split('/').slice(len - (len - 3)).join('/')
     }
     const homeCMDtext = username + "@HomeDesktop:" + path + "$ ";
 
     homeCMD.textContent = homeCMDtext;
-    
+
     const form = document.createElement("form");
     form.setAttribute("style", "flex-grow:1")
-    
+
     line.appendChild(homeCMD)
     line.appendChild(form)
 
@@ -145,14 +143,14 @@ function resetCMDLine() {
 
         historyIndex = 0
     };
-    
+
 
 }
 
 async function parseAndRunCMD(cmd) {
-    if(cmd != '')
+    if (cmd != '')
         cmdHistory.push(cmd)
-    if(cmdHistory.length > 50) 
+    if (cmdHistory.length > 50)
         cmdHistory = cmdHistory.slice(1)
     const parsedCMD = cmd.toLowerCase().split(" ");
 
@@ -164,7 +162,7 @@ async function parseAndRunCMD(cmd) {
             printTerminal(helpMSG)
             break;
         case ('man'):
-            if (!parsedCMD[1]) 
+            if (!parsedCMD[1])
                 printTerminal("Missing parameter <cmd>. \nSyntax: man <cmd>")
             else
                 printManual(parsedCMD[1])
@@ -185,7 +183,7 @@ async function parseAndRunCMD(cmd) {
             if (!parsedCMD[1]) {
                 printTerminal("Missing parameter <username>. \nSyntax: rename <username>")
             } else {
-                username = parsedCMD[1].slice(0,10)
+                username = parsedCMD[1].slice(0, 10)
             }
             break;
         case (""):
@@ -194,7 +192,7 @@ async function parseAndRunCMD(cmd) {
             printTerminal(`${cmd}: command not found. Type 'help' to see a list of commands\n`)
             await printChat("bruh")
             break;
-        }
+    }
     resetCMDLine();
     saveSession();
 }
@@ -206,7 +204,7 @@ function saveSession() {
 }
 
 const helpMSG = "Commonly used commands:\n" +
-"clear \t\t\t\t\t- Clear the terminal screen\n"+
+    "clear \t\t\t\t\t- Clear the terminal screen\n" +
     "ls\t\t\t\t\t\t- View the current folder's contents\n" +
     "man <cmd>\t\t\t\t- Explain the specified <cmd> in more detail\n" +
     "cd <folder>\t\t\t\t- Move yourself into the specified folder\n" +
@@ -217,11 +215,11 @@ const helpMSG = "Commonly used commands:\n" +
     "pwd\t\t\t\t\t\t- Show where you are located (Print Working Directory)\n" +
     "ps\t\t\t\t\t\t- Show currently running processes\n" +
     "kill <ID>\t\t\t\t- Kill the process with id <ID>\n" +
-    "rename <username>\t\t- Set your username to <userame>\n" 
+    "rename <username>\t\t- Set your username to <userame>\n"
     ;
 
 
-function firstTimeStartup () {
+function firstTimeStartup() {
 
 }
 
@@ -238,11 +236,19 @@ desktopFolder.append(homeFile)
 desktopFolder.append(homeFile)
 
 
+window.addEventListener("blur", function (event) {
+    bgm.volume = 0.08;
+},
+    false);
 
+window.addEventListener("focus", function (event) {
+    bgm.volume = 0.30;
+},
+    false);
 
 document.addEventListener('keyup', function (event) {
     if (event.key === 'ArrowUp') {
-        historyIndex = historyIndex > 0 ? historyIndex - 1 : cmdHistory.length-1;
+        historyIndex = historyIndex > 0 ? historyIndex - 1 : cmdHistory.length - 1;
         cmdInput.value = cmdHistory[historyIndex];
     } else if (event.key === 'ArrowDown') {
         historyIndex += 1;
@@ -253,6 +259,9 @@ document.addEventListener('keyup', function (event) {
 
 
 
+
+
+var bgm = new Audio('sounds/HacknetOSTNonCR.mp3');
 var username = localStorage.getItem("username") != null ? localStorage.getItem("username") : "s-admin"
 var cmdHistory = localStorage.getItem("cmdHistory") != null ? localStorage.getItem("cmdHistory").split(",") : [''];
 var currentFolder = userFolder
@@ -263,17 +272,14 @@ document.addEventListener("DOMContentLoaded", async function () {
     chat.textContent = ''
     terminal.textContent = ''
 
-    // shell.cd("./game/root/home")
-    // printTerminal(shell.pwd())
-
-
-    const greeting = "Welcome to D3b1an XX.04.5 LTS.\n\n"+
-    "25 updates can be applied immediately.\n" + 
-    "8 of these updates are standard security updates.\n\n" +
-    "To view a list of commands, run:\n" +
-    "help\n\n";
+    const greeting = "Welcome to D3b1an XX.04.5 LTS.\n\n" +
+        "25 updates can be applied immediately.\n" +
+        "8 of these updates are standard security updates.\n\n" +
+        "To view a list of commands, run:\n" +
+        "help\n\n";
     printTerminal(greeting);
     resetCMDLine();
+
 
     await printChat('Welcome to ReUnix.')
     await delay(500)
@@ -282,8 +288,12 @@ document.addEventListener("DOMContentLoaded", async function () {
 
     await delay(500)
 
-    await printChat('To get started, try typing "help" in the terminal and '+
-    'pressing enter.')
+    await printChat('To get started, try typing "help" in the terminal and ' +
+        'pressing enter.')
 
+    // create a start menu screen and wrap this in an event listener for the
+    // start button
+    bgm.volume = 0.30;
+    bgm.play();
 
 });

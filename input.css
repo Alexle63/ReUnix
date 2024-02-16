@@ -6,7 +6,12 @@
     html {
         font-family: 'Lucida Console', monospace;
     }
+
     input:focus {
         outline: none;
+    }
+
+    #terminal {
+        scrollbar-color: green black;
     }
 }

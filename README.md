@@ -4,4 +4,4 @@ changes in CSS:
 npx tailwindcss -i ./input.css -o ./style.css --watch
 
 Start HTTPS/JS Dev server, run the command:
-http-server
+npx http-server
