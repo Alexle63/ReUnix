@@ -15,6 +15,16 @@ help     done
 history  done
 ch       done
 rename   done
+touch    *
+ssh      *
+echo        
+
+- la, cat, rm, echo
+- cd, pwd, ., ..
+- mv, cp, rename, touch
+- ps, kill
+- clear, history
+- ssh, sudo
 
 Implement a function to scrape current folder contents for file with correct name
 
