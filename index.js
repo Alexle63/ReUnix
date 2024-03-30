@@ -35,6 +35,10 @@ class Folder {
         this.#name = name;
         this.#contents = [];
         this.#parent = parent;
+        if (parent) {
+            console.log(parent)
+            parent.append(this)
+        }
     }
     /**
      * @param {(arg0: SFile | Folder) => void} file
@@ -46,7 +50,7 @@ class Folder {
         return this.#name
     }
     get contents() {
-        return this.#contents.map((file) => file.name).join("\t")
+        return this.#contents
     }
     get rootPath() {
         return !this.#parent ? '' : this.#parent.rootPath + '/' + this.#name
@@ -159,9 +163,9 @@ async function parseAndRunCMD(cmd) {
         cmdHistory.push(cmd)
     if (cmdHistory.length > 50)
         cmdHistory = cmdHistory.slice(1)
-    const parsedCMD = cmd.toLowerCase().split(" ");
+    const parsedCMD = cmd.split(" ");
 
-    switch (parsedCMD[0]) {
+    switch (parsedCMD[0].toLowerCase()) {
         case ("clear"):
             terminal.textContent = ''
             break;
@@ -178,7 +182,19 @@ async function parseAndRunCMD(cmd) {
             cmdHistory = ['']
             break;
         case ("ls"):
-            printTerminal(currentFolder.contents)
+            let files = currentFolder.contents
+            if (parsedCMD[1]){
+                if (parsedCMD[1] == "-a") {
+                    printChat("test")
+                    printTerminal(files.map((file) => file.name).join("\t"))
+                } else {
+                    let newArr = files.filter(a => a.name.slice(0, 1) !== '.')
+                    printTerminal(newArr.map((file) => file.name).join("\t"))
+                }
+            } else {
+                let newArr = files.filter(a => a.name.slice(0,1) !== '.')
+                printTerminal(newArr.map((file) => file.name).join("\t"))
+            }
             break;
         case ("history"):
             printTerminal(cmdHistory.slice(1).join("\n") + "\n")
@@ -191,6 +207,13 @@ async function parseAndRunCMD(cmd) {
                 printTerminal("Missing parameter <username>. \nSyntax: rename <username>")
             } else {
                 username = parsedCMD[1].slice(0, 10)
+            }
+            break;
+        case ('cat'):
+            if (!parsedCMD[1]) {
+                printTerminal("Missing parameter <filename>. \nSyntax: cat <filename>")
+            } else {
+                catFile(parsedCMD[1])
             }
             break;
         case (""):
@@ -210,12 +233,23 @@ function saveSession() {
     localStorage.setItem("cmdHistory", cmdHistory);
 }
 
+function catFile(target) {
+    let files = userFolder.contents;
+    for (let file of files) {
+        if (file.name == target) {
+            printTerminal(file.content)
+            return;
+        }
+    }
+    printTerminal(`File "${target}" not found.`)
+}
+
 const helpMSG = "Commonly used commands:\n" +
     "clear \t\t\t\t\t- Clear the terminal screen\n" +
     "ls\t\t\t\t\t\t- View the current folder's contents\n" +
     "man <cmd>\t\t\t\t- Explain the specified <cmd> in more detail\n" +
     "cd <folder>\t\t\t\t- Move yourself into the specified folder\n" +
-    "cat\t\t\t\t\t\t- Print out the contents of a file\n" +
+    "cat <file> \t\t\t\t- Print out the contents of a file\n" +
     "rm <filepath>\t\t\t- Remove the specified file\n" +
     "mv <filepath> <dest>\t- Move the file <filepath> to <dest>\n" +
     "cp <filepath> <dest>\t- Copy the file <filpath> and paste it in <dest>\n" +
@@ -237,7 +271,13 @@ var userFolder = new Folder("user", homeFolder)
 var desktopFolder = new Folder("Desktop", userFolder)
 var homeFile = new SFile("FileX.net", "true", "hey now, you're an all star")
 
+var secret = new SFile(".secret.md", "true", "Hello more experienced user! This game is meant for users who haven't touched an ounce of BASH or terminal based navigation but since you found this file, it seems you know your way around! Feel free to keep playing, but you will notice that some features may be missing")
+
 userFolder.append(homeFile)
+userFolder.append(homeFile)
+userFolder.append(homeFile)
+userFolder.append(homeFile)
+userFolder.append(secret)
 desktopFolder.append(homeFile)
 desktopFolder.append(homeFile)
 desktopFolder.append(homeFile)
@@ -262,6 +302,7 @@ document.addEventListener('keyup', function (event) {
         historyIndex = historyIndex % cmdHistory.length
         cmdInput.value = cmdHistory[historyIndex];
     }
+    cmdInput.focus()
 });
 
 
