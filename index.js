@@ -367,7 +367,10 @@ function changeDirectory(arguments) {
 }
 
 function processStatus() {
-    printTerminal(JSON.stringify(processes))
+    printTerminal("ID\t\t\tCommand")
+    for (var id of Object.keys(processes)) {
+        printTerminal(id + "\t\t" + processes[id])
+    }
 }
 
 function killProcess(arguments) {
@@ -421,7 +424,7 @@ async function gameLoop() {
     let latestCMD;
     while (true) {
         if (chatEventQueue.length) {
-            await printChat(chatEventQueue.shift())
+            await printChat("\n" + chatEventQueue.shift())
             saveSession();
         }
 
@@ -520,6 +523,13 @@ const storyCommands = [
     },
     {
         "command": "cat notepad.txt",
-        "chat": "Weird note, I wonder if it's a pop culture reference or something.\n\nThe command 'cat' stands for concatinate. You usually use this command to combine two files and print their contents to the terminal, but we can discuss it later.\n\nAll you need to know is that 'cat' is a great command for peeking into files!"
+        "chat": "Weird note, I wonder if it's a pop culture reference or something.\n\nThe command 'cat' stands for concatinate. You usually use this command to combine two files and print their contents to the terminal, but here we only wanted print out what was inside the file.\n\nAll you need to know is that 'cat' is a great command for peeking into files!"
+    },
+]
+
+var asyncCommands = [
+    {
+        "command": "ls -a",
+        "chat": "Oh.. looking for secrets maybe?"
     },
 ]
