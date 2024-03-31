@@ -5,6 +5,16 @@ npx tailwindcss -i ./input.css -o ./style.css --watch
 
 Start HTTPS/JS Dev server, run the command:
 npx http-server
+(Note to self: this is only applicable when working with Node.js modules,
+ignore this command otherwise)
+
+See the "application":
+Open 'index.html' in a web browser
+- Right click 'index.html' in the explorer side bar   <<=== over there
+- Click "Copy path" , NOT relative path
+- Paste what you copied in a web browser search bar as if it were a URL
+Or simply just double-click the index.html file in file explorer
+
 
 # The Grand Idea:
 
@@ -13,7 +23,7 @@ boot up terminal as usual
 
 Here, the player is "in their home desktop directory" terminal and will
 be guided by a contractor, who will talk through the chat. The contractor
-(idk come up with a name or something) guide the player on how to use
+(idk come up with a name or something) guides the player on how to use
 the terminal to navigate, see, and interact with file system.
 
 Eventually, "levels" will get harder. Here are some ideas for levels:
