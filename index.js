@@ -424,7 +424,7 @@ async function gameLoop() {
     let latestCMD;
     while (true) {
         if (chatEventQueue.length) {
-            await printChat("\n" + chatEventQueue.shift())
+            await printChat(chatEventQueue.shift() + "\n")
             saveSession();
         }
 
@@ -433,6 +433,14 @@ async function gameLoop() {
         latestCMD = cmdHistory[cmdHistory.length - 1].toLowerCase()
 
         await delay(500)
+        for (let item of asyncCommands) {
+            if (item.command === latestCMD) {
+                chatEventQueue.push(item.chat)
+                asyncCommands.pop(item)
+                break;
+            }
+        }
+
         if (GAMESTEP >= storyCommands.length) {
             continue
             // chatEventQueue.push("\nfinish")
@@ -440,6 +448,7 @@ async function gameLoop() {
             chatEventQueue.push("\n" + storyCommands[GAMESTEP].chat)
             GAMESTEP += 1
         }
+
 
     }
 }
