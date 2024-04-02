@@ -47,6 +47,63 @@ class Folder {
     }
 }
 
+const motds = [
+    "Hack the system, break the rules, rewrite the code.",
+    "In the digital realm, nothing is as it seems.",
+    "Unlock the secrets of the binary universe.",
+    "Code is your weapon, wield it wisely.",
+    "Stealth is your ally, anonymity your shield.",
+    "Trust no code but your own.",
+    "Navigate the networks, manipulate the data.",
+    "In the land of algorithms, only the clever survive.",
+    "Decrypt the mysteries of the cybernetic age.",
+    "In a world of ones and zeroes, be the one who changes everything.",
+    "Explore the dark corners of the digital domain.",
+    "Leave no firewall unbreached.",
+    "Master the art of virtual infiltration.",
+    "Hackers rule the world behind the screen.",
+    "Defy logic, defy authority, defy the system.",
+    "Embrace the chaos of the digital frontier.",
+    "Adapt, improvise, overcome - the hacker's creed.",
+    "Information is power, but knowledge is liberation.",
+    "Crack the codes, seize the data, control the outcome.",
+    "In the realm of cyberspace, imagination is your only limit.",
+    "Unleash your inner technomancer.",
+    "In the heart of the mainframe, find your true self.",
+    "The code is your canvas, paint your masterpiece.",
+    "Navigate the labyrinth of the digital maze.",
+    "Behind every firewall lies a world waiting to be explored.",
+    "Hackers thrive where others fear to tread.",
+    "Data is the currency of the future, steal wisely.",
+    "Bypass the defenses, rewrite the narrative.",
+    "In the digital wilderness, be the apex predator.",
+    "Crack the encryption, uncover the truth.",
+    "In the dance of bytes and bits, be the choreographer.",
+    "Forge your own path through the tangled web of cyberspace.",
+    "In the realm of the virtual, anything is possible.",
+    "Challenge the status quo, rewrite the rules.",
+    "Venture into the unknown, conquer the digital frontier.",
+    "Hackers are the architects of the future.",
+    "Embrace the shadows, harness the darkness.",
+    "In the world of bits and bytes, be the byte-sized revolution.",
+    "Unleash the power of the algorithmic arts.",
+    "Defy the binary code, transcend the limitations.",
+    "In the realm of electrons, be the spark of change.",
+    "Ride the digital wave, carve your own destiny.",
+    "In the labyrinth of cyberspace, find your way or forge it.",
+    "Hack the planet, one line of code at a time.",
+    "In the age of information, knowledge is your greatest weapon.",
+    "Decode the mysteries of the digital cosmos.",
+    "In the infinite expanse of cyberspace, be the anomaly.",
+    "Crack the virtual vaults, claim your rightful plunder.",
+    "In the code, find your purpose, your power, your destiny.",
+    "Navigate the sea of data, chart your own course."
+];
+
+function getMOTD() {
+    return motds[Math.floor(Math.random() * motds.length)]
+}
+
 function printTerminal(text, type = "p") {
     const element = document.createElement(type);
     element.textContent = text;
@@ -65,19 +122,24 @@ async function printChat(text) {
     while (i < text.length) {
         chat.textContent += text.charAt(i);
         i++;
+        if (text.charAt(i) == '\n')
+            await delay(490);
         await delay(10);
-        document.getElementById("chat").scrollTo(0, document.body.scrollHeight)
+        document.getElementById("chat").scrollTo(0, 100000)
     }
 }
 
 function printManual(cmd) {
-    switch (cmd) {
+    switch (cmd.pop()) {
         case ("man"):
             printTerminal("Here is the manual page for the command:")
             printTerminal("man")
             break;
+        case (undefined):
+            printTerminal("Missing arguments. Syntax: man <cmd>")
+            break;
         default:
-            printTerminal(`Command ${cmd} not found.`)
+            printTerminal(`Manual page for ${cmd} coming soon!`)
     }
 }
 
@@ -162,6 +224,7 @@ function saveSession() {
     localStorage.setItem("GAMESTEP", GAMESTEP)
     localStorage.setItem("chat", document.getElementById("chat").textContent)
     localStorage.setItem("processes", JSON.stringify(processes))
+    localStorage.setItem("asyncCommands", JSON.stringify(asyncCommands))
 }
 
 
@@ -189,7 +252,10 @@ async function parseAndRunCMD(cmd) {
                 "ps\t\t\t\t\t\t- Show currently running processes\n" +
                 "kill <ID>\t\t\t\t- Kill the process with id <ID>\n" +
                 "history \t\t\t\t- See previous command history\n" +
-                "rename <username>\t\t- Set your username to <username>\n"
+                "rename <username>\t\t- Set your username to <username>\n" +
+                "music \t\t\t\t\t- Turns on the music\n\n" +
+                "IF THE GAME BREAKS AT ANY MOMENT, reset the game progress with the command: 'sc'\n" +
+                "Remember, 'sc' is not a real BASH command and is unique to this game.\n\n"
             );
             break;
         case ("clear"):
@@ -236,6 +302,10 @@ async function parseAndRunCMD(cmd) {
                 printTerminal("Missing parameter <username>. \nSyntax: rename <username>");
             else
                 username = parsedCMD[1].slice(0, 10);
+            break;
+        case ('music'):
+            processes["1304244"] = "spotify.exe"
+            bgm.play()
             break;
         case ('sc'):
             localStorage.clear();
@@ -307,6 +377,7 @@ function copyFile(arguments) {
 
     if (!selectedItem) {
         printTerminal(`File '${arguments[0]}' not found.`)
+        return
     }
     currentFolder.contents[arguments[1]] = Object.assign({}, selectedItem)
     currentFolder.contents[arguments[1]].name = arguments[1]
@@ -314,6 +385,10 @@ function copyFile(arguments) {
 }
 
 function moveFile(arguments) {
+    if (arguments.length < 2) {
+        printTerminal("Missing arguments. Syntax: mv <filename> <destination>.")
+        return
+    }
     copyFile(arguments)
     delete currentFolder.contents[arguments[0]]
 }
@@ -398,8 +473,10 @@ function firstTimeStartup() {
     const greeting = "Welcome to D3b1an XX.04.5 LTS.\n\n" +
         "25 updates can be applied immediately.\n" +
         "8 of these updates are standard security updates.\n\n" +
+        `\t"${getMOTD()}"\n\n` +
         "To view a list of commands, run:\n" +
         "help\n\n";
+
     printTerminal(greeting);
     resetCMDLine();
 
@@ -411,13 +488,24 @@ function firstTimeStartup() {
         chatEventQueue.push('To get started, try typing "help" in the terminal and ' +
             'pressing enter.')
     }
-    document.getElementById("chat").scrollTo(0, document.body.scrollHeight)
+    document.getElementById("chat").scrollTo(0, 100000)
 
 
     // create a start menu screen and wrap this in an event listener for the
     // start button
+    bgm.loop = true;
     bgm.volume = 0.30;
-    bgm.play();
+    if (processes["1304244"])
+        bgm.play();
+}
+
+async function startGame() {
+    document.getElementById("startMenu").style.display = "none"
+    document.getElementById("mainGame").style.display = "flex"
+    document.getElementById("terminal").style.height = "100%"
+    document.getElementById("chat").style.height = "100%"
+    firstTimeStartup()
+    await gameLoop()
 }
 
 async function gameLoop() {
@@ -430,7 +518,8 @@ async function gameLoop() {
 
         // console.log("ticking...")
 
-        latestCMD = cmdHistory[cmdHistory.length - 1].toLowerCase()
+        latestCMD = cmdHistory[cmdHistory.length - 1]
+        document.getElementById("cmdInput").focus()
 
         await delay(500)
         for (let item of asyncCommands) {
@@ -439,6 +528,9 @@ async function gameLoop() {
                 asyncCommands.pop(item)
                 break;
             }
+
+            if (latestCMD == 'kill 1304244')
+                bgm.pause()
         }
 
         if (GAMESTEP >= storyCommands.length) {
@@ -473,7 +565,6 @@ document.addEventListener('keyup', function (event) {
         historyIndex = historyIndex % cmdHistory.length
         cmdInput.value = cmdHistory[historyIndex];
     }
-    document.getElementById("cmdInput").focus()
 });
 
 
@@ -485,7 +576,7 @@ var userFolder = new Folder("user", homeFolder)
 var desktopFolder = new Folder("Desktop", userFolder)
 
 var homeFile = new SFile("notepad.txt", "true", "hey now, you're an all star")
-var desktopFile = new SFile("desktop.txt", "true", "yay, you found the file")
+var desktopFile = new SFile("desktop.txt", "true", "According to all known laws of aviation, there is no way that a bee should be able to fly. Its wings are too small to get its fat little body off the ground")
 
 var secret = new SFile(".secret.md", "true", "Hello more experienced user! This game is meant for users who haven't touched an ounce of BASH or terminal based navigation but since you found this file, it seems you know your way around!\n\nFeel free to keep playing, but you WILL notice that most BASH functionality will be missing!")
 
@@ -494,6 +585,7 @@ userFolder.append(secret)
 desktopFolder.append(desktopFile)
 
 var bgm = new Audio('sounds/HacknetOSTNonCR.mp3');
+// var bgm = new Audio('sounds/test.mp3');
 var username = localStorage.getItem("username") ? localStorage.getItem("username") : "s-admin"
 var cmdHistory = localStorage.getItem("cmdHistory") ? localStorage.getItem("cmdHistory").split(",") : [''];
 var currentFolder = userFolder
@@ -513,32 +605,94 @@ var processes = localStorage.getItem("processes") ? JSON.parse(localStorage.getI
 }
 
 
-document.addEventListener("DOMContentLoaded", async function () {
-    firstTimeStartup()
-    await gameLoop()
-});
-
-
 
 
 const storyCommands = [
     {
         "command": "help",
-        "chat": "Great, you got it!\n\nThis is a list of commands that are most commonly used in BASH navigation. It may be a lot but you can and will surely master them all!\n\nTry taking a look around your current position. Type the command 'ls'."
+        "chat": "You've just entered your first command! \n\nThe command you just entered gives a list of commands that are most commonly used in BASH navigation. It may be a lot but you can and will surely master them all!\n\nTry taking a look around your current position. \n\nType the command 'ls'."
     },
     {
         "command": "ls",
-        "chat": "Nice! The terminal should've printed the contents of your current folder.\n\nThe bolded 'Desktop' means that this is a folder and the regular highlighted text means that it is a file.\n\nJust like you would have folders and files that you can see when you open File Explorer on Windows or Finder on MacOS, you can navigate through a file system using just text! \n\nLet's try seeing what's inside of the text file. Type 'cat notepad.txt'"
+        "chat": "Nice! The terminal should've printed the contents of your current folder.\n\nThe bolded 'Desktop' means that this is a folder and the regular highlighted text means that it is a file.\n\nJust like you would have folders and files that you can see when you open File Explorer on Windows or Finder on MacOS, you can navigate through a file system using just text! \n\nLet's try seeing what's inside of the text file. \n\nType 'cat notepad.txt'"
     },
     {
         "command": "cat notepad.txt",
-        "chat": "Weird note, I wonder if it's a pop culture reference or something.\n\nThe command 'cat' stands for concatinate. You usually use this command to combine two files and print their contents to the terminal, but here we only wanted print out what was inside the file.\n\nAll you need to know is that 'cat' is a great command for peeking into files!"
+        "chat": "Weird note, I wonder if it's a pop culture reference or something.\n\nThe command 'cat' stands for concatinate. You usually use this command to combine two files and print their contents to the terminal, but here we only wanted print out what was inside the file.\n\nAll you need to know is that 'cat' is a great command for peeking into files!\n\nLet's see if there's anything interesting on your Desktop. You can CHANGE DIRECTORY using the command 'cd'. \n\nType 'cd Desktop' to move to your desktop.\n\nRemember, names are case-sensitive!"
+    },
+    {
+        "command": "cd Desktop",
+        "chat": "You just switched from your user folder to your Desktop! If you ever get lost, you can run the following command to see where you're at:\n\n'pwd'\n\nThis stands for Print Working Directory. This command will print the file path of where you are located based on the root folder--your Working Directory."
+    },
+    {
+        "command": "pwd",
+        "chat": "Imagine your computer system as a big file cabinet named 'root'. \nIf so, then you are currently in the 'Desktop' folder, \nwhich is inside the 'user' folder, \nwhich is inside the 'home' folder, \nwhich is inside the root 'cabinet'. \n\nTalk about file-ception! \n\nNow that you're in the Desktop folder, let's take a look around and see what's inside the folder."
+    },
+    {
+        "command": "ls",
+        "chat": "'desktop.txt'.... I wonder what it says."
+    },
+    {
+        "command": "cat desktop.txt",
+        "chat": "Well that wasn't very helpful. Let's clean this place up a little. Remove the file using the command \n\n'rm desktop.txt'"
+    },
+    {
+        "command": "rm desktop.txt",
+        "chat": "Much cleaner. Take a look again to see that the file was deleted."
+    },
+    {
+        "command": "ls",
+        "chat": "Yup, a whole lotta nothing around here.\n\nSo now, how do we get back to the folder we were in before? What do I mean? Print out your working directory."
+    },
+    {
+        "command": "pwd",
+        "chat": "See how you're in the Desktop folder right now? We want to go back to the 'user' folder, but how do we do this? \n\nWe call the folder 'before' or 'above' us, our parent folder/directory. Here, the 'user' folder is our parent directory; it is above our current position.\n\nThe way we refer to our parent folder is the notation '..' -- yup, just two dots. Try it: \n\nCD into the folder named '..' with the command 'cd ..'"
+    },
+    {
+        "command": "cd ..",
+        "chat": "You're back in the user folder! You can confirm that by printing your working directory again."
+    },
+    {
+        "command": "pwd",
+        "chat": "Yup, you really are back in the user folder.\n\nLet's manipulate the 'notepad.txt' file a bit. Let's rename the text file so we can better identify it in the future. \n\nRenaming is a bit weird in BASH, because you use the same command to both move AND rename a file. Rename the file to 'smashMouth.txt' by running the command:\n\n'mv notepad.txt smashMouth.txt'"
+    },
+    {
+        "command": "mv notepad.txt smashMouth.txt",
+        "chat": "Not confident the file was renamed? Type 'ls' to check that your file was renamed."
+    },
+    {
+        "command": "ls",
+        "chat": "Looks like it was renamed alright. Confirm that its contents didn't change either by printing out its contents."
+    },
+    {
+        "command": "cat smashMouth.txt",
+        "chat": "Yup, same old pop culture lyrics. \n\nWe can also copy/duplicate a file, as long as it has a different name. Duplicate 'smashMouth.txt' to another file named 'steveHarwell.txt' with the command:\n\n'cp smashMouth.txt steveHarwell.txt'"
+    },
+    {
+        "command": "cp smashMouth.txt steveHarwell.txt",
+        "chat": "Seems to have copied successfully. Try listing your working directory contents. ('ls')"
+    },
+    {
+        "command": "ls",
+        "chat": "Nice, the file was copied successfully!\n\nEND OF DEMO"
     },
 ]
 
-var asyncCommands = [
+var asyncCommands = localStorage.getItem("asyncCommands") ? JSON.parse(localStorage.getItem("asyncCommands")) : [
     {
         "command": "ls -a",
         "chat": "Oh.. looking for secrets maybe?"
+    },
+    {
+        "command": "ps",
+        "chat": "Ah, the command 'ps'.\n\nThis stands for Process Status; it's how you check what programs are running on your computer. From the looks of it, you seem to have Spotify, Discord, VSCode, and Steam open. \n\nOh? But what's this? 'definitelyNotaTr0jAn.exe'?? Do you even remember opening this?\n\nStop the process, it's probably not a good idea to have a trojan running on your computer... You can kill a process by running the command:\n\n'kill <id>'\n\nLooks like the id here is '4166002'. Give that a try."
+    },
+    {
+        "command": "kill 4166002",
+        "chat": "Should've done this sooner, at least you didn't log into your bank account while it was running... Did you?"
+    },
+    {
+        "command": "kill 1304244",
+        "chat": "Do you just not like music? Run 'music' if you change your mind..."
     },
 ]

@@ -9,13 +9,30 @@
     <script src="index.js"></script>
 </head>
 
-<body>
-    <div class="flex h-screen text-grn bg-black font-xs overflow-hidden break-words">
+<body class="bg-black overflow-hidden">
+    <div id="startMenu" class="p-4 flex h-screen text-grn bg-black text-center">
+        <button onclick="startGame()" class="
+            bg-black 
+            ease-in-out 
+            duration-500 
+            border-grn 
+            hover:bg-grn 
+            hover:text-black 
+            m-auto 
+            p-12 
+            text-2xl 
+            rounded-2xl
+            ">
+            POWER ON</button>
+    </div>
 
-        <div class="block w-3/4 border-grn border pb-36 p-4 whitespace-pre-wrap overflow-y-auto" id="terminal">
+    <div id="mainGame"
+        class="p-4 ease-in-out duration-500 h-screen hidden text-grn bg-black font-xs overflow-hidden break-words">
+
+        <div class="h-0 block w-3/4 border-grn border pb-36 p-4 whitespace-pre-wrap overflow-y-auto" id="terminal">
         </div>
 
-        <p class="border border-grn h-screen w-1/4 pb-36 p-4  whitespace-pre-wrap overflow-y-auto" id="chat">
+        <p class="h-0 border border-grn h-screen w-1/4 pb-36 p-4  whitespace-pre-wrap overflow-y-auto" id="chat">
         </p>
     </div>
 
