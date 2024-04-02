@@ -522,13 +522,10 @@ async function gameLoop() {
         document.getElementById("cmdInput").focus()
 
         await delay(500)
-        for (let item of asyncCommands) {
-            if (item.command === latestCMD) {
-                chatEventQueue.push(item.chat)
-                asyncCommands.pop(item)
-                break;
-            }
-
+        if (asyncCommands[latestCMD]) {
+            chatEventQueue.push(asyncCommands[latestCMD])
+            delete asyncCommands[latestCMD]
+            console.log("popped and broken")
             if (latestCMD == 'kill 1304244')
                 bgm.pause()
         }
@@ -678,21 +675,10 @@ const storyCommands = [
     },
 ]
 
-var asyncCommands = localStorage.getItem("asyncCommands") ? JSON.parse(localStorage.getItem("asyncCommands")) : [
+var asyncCommands = localStorage.getItem("asyncCommands") ? JSON.parse(localStorage.getItem("asyncCommands")) : 
     {
-        "command": "ls -a",
-        "chat": "Oh.. looking for secrets maybe?"
-    },
-    {
-        "command": "ps",
-        "chat": "Ah, the command 'ps'.\n\nThis stands for Process Status; it's how you check what programs are running on your computer. From the looks of it, you seem to have Spotify, Discord, VSCode, and Steam open. \n\nOh? But what's this? 'definitelyNotaTr0jAn.exe'?? Do you even remember opening this?\n\nStop the process, it's probably not a good idea to have a trojan running on your computer... You can kill a process by running the command:\n\n'kill <id>'\n\nLooks like the id here is '4166002'. Give that a try."
-    },
-    {
-        "command": "kill 4166002",
-        "chat": "Should've done this sooner, at least you didn't log into your bank account while it was running... Did you?"
-    },
-    {
-        "command": "kill 1304244",
-        "chat": "Do you just not like music? Run 'music' if you change your mind..."
-    },
-]
+        "ls -a": "Oh.. looking for secrets maybe?",
+        "ps": "Ah, the command 'ps'.\n\nThis stands for Process Status; it's how you check what programs are running on your computer. From the looks of it, you seem to have Spotify, Discord, VSCode, and Steam open. \n\nOh? But what's this? 'definitelyNotaTr0jAn.exe'?? Do you even remember opening this?\n\nStop the process, it's probably not a good idea to have a trojan running on your computer... You can kill a process by running the command:\n\n'kill <id>'\n\nLooks like the id here is '4166002'. Give that a try.",
+        "kill 4166002": "Should've done this sooner, at least you didn't log into your bank account while it was running... Did you?",
+        "kill 1304244": "Do you just not like music? Run 'music' if you change your mind...",
+    }
