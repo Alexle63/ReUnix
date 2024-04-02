@@ -1,3 +1,21 @@
+# FOR PLAYERS:
+
+Open "PLAY_GAME.html" in your browser.
+
+You can do this by...
+ - Right-clicking the file, "Copy path," paste in a browser of your choice
+ - Double-clicking on the file in File Explorer (Windows) / Finder (Apple)
+
+
+
+
+
+
+
+
+# FOR DEVELOPERS OF THE GAME BELOW:
+
+
 Run the following command in a new terminal before developing to see
 changes in CSS:
 
